@@ -1,0 +1,54 @@
+.global main, flag
+.text
+main:
+
+movw r3, $flag
+cmpw 3, r3
+jgt preskoci
+call printfunction
+movw r5, &flag
+movw r5[0], 0
+preskoci:
+jmp main
+ret
+
+
+printfunction:
+movw r0,0
+petlja:
+cmpw r0, niz_length
+jeq kraj
+movb *0xFF00, r0[niz]
+addb r0l,1
+jmp petlja
+kraj:
+movb *0xFF00, new_line
+ret
+
+.data
+flag:
+.word 0
+
+niz:
+.byte 83
+.byte 105
+.byte 115
+.byte 116
+.byte 101
+.byte 109
+.byte 115
+.byte 107
+.byte 105
+.byte 32
+.byte 115
+.byte 111
+.byte 102
+.byte 116
+.byte 118
+.byte 101
+.byte 114
+.equ niz_length, 17
+
+new_line:
+.byte 10
+.end

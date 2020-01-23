@@ -1,0 +1,61 @@
+.global timerfunction, terminalfunction
+
+.extern flag
+
+.text
+
+timerfunction:
+push 1
+pop r0
+subw r0,1
+petlja:
+cmpw r0, niz_timer_length
+jeq kraj
+movw *0xFF00, r0[niz_timer]
+addb r0l,2
+jmp petlja
+kraj:
+movw *0xFF00, new_line
+addw $flag , 1
+pop pc
+
+terminalfunction:
+cmpb 27, *0xFF02
+jeq esc
+movw r0, 0
+petlja1:
+cmpw r0, niz_terminal_length
+jeq kraj1
+movb *0xFF00, r0[niz_terminal]
+addw r0, 1
+jmp petlja1
+kraj1:
+movb *0xFF00, *0xFF02
+movb *0xFF00, new_line
+ret
+esc:
+halt
+
+.data
+niz_timer:
+.word 84
+.word 105
+.word 109
+.word 101
+.word 114
+.equ niz_timer_length, 10
+
+niz_terminal:
+.byte 80
+.byte 114
+.byte 101
+.byte 115
+.byte 115
+.byte 101
+.byte 100
+.byte 32
+.equ niz_terminal_length, 8
+
+new_line:
+.byte 10
+.end

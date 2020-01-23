@@ -1,0 +1,57 @@
+.global main,flag
+.text
+main:
+
+push 0x61
+pop r3
+movb *0xff00, r3l
+
+shlw r3,8
+movb *0xff00, r3h
+
+divw $z, 2
+movw *0xff00, z
+
+shlw z,1
+movw *0xff00, $z
+
+movb *0xff00, pom
+
+movw r1, &pom
+movw *0xff00, r1[0]
+
+movw r1,1
+movb *0xff00, r1[pom]
+
+cmpw pom, 20
+jgt preskoci
+addw pom, 2
+preskoci:
+addw pom, 3
+movw *0xff00, $pom
+
+movb r4h, 0xCA
+notb r4h
+movb *0xff00, r4h
+
+movw r2, 100
+orw r2, 1
+movw *0xff00, r2
+
+movw r2,&pom
+movb *0xff00, r2[1]
+
+movw *0xff00, 10
+
+intb 2
+ret
+
+pom:
+.byte 65, 66
+
+.data
+z:
+.word 122
+flag:
+.word 0
+.end

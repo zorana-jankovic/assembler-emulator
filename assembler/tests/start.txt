@@ -1,0 +1,41 @@
+.text
+.extern main,timerfunction,terminalfunction
+
+start:
+movw r0,0
+movw r1,0
+movw r2,0
+movw r3,0
+movw r4,0
+movw r5,0
+movw r6,&stackend
+movw psw, 0xE000
+movw *0xFF10, 1
+call $main
+halt
+
+illegalinstr:
+halt
+
+timer:
+call timerfunction
+iret
+
+terminal:
+call terminalfunction
+iret
+
+.section ivtable "r"
+.word start
+.word illegalinstr
+.word timer
+.word terminal
+.word 0
+.word 0
+.word 0
+.word 0
+ 
+.section stack "rw"
+.skip 2000
+stackend:
+.end
